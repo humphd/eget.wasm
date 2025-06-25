@@ -15,6 +15,7 @@ import { randomUUID } from "node:crypto";
 import { cwd } from "node:process";
 import { pipeline } from "node:stream/promises";
 import { Transform } from "node:stream";
+import * as packageJson from "./package.json" with { type: "json" };
 
 /**
  * HTTP errors
@@ -360,7 +361,7 @@ export class Eget {
    */
   log(...message) {
     if (this.verbose) {
-      console.error("[eget.wasm]", ...message);
+      console.error("[eget-wasm]", ...message);
     }
   }
 
@@ -397,7 +398,7 @@ export class Eget {
       this.log(`Downloading: ${url} to ${filePath}`);
       const response = await fetch(url, {
         headers: {
-          "User-Agent": "eget.wasm",
+          "User-Agent": `eget-wasm/${packageJson.version}`,
         },
         signal: controller.signal,
       });

@@ -1,11 +1,12 @@
-# Eget: easy pre-built binary installation
+# eget-wasm: WASM and node.js wrapper for eget. Easily install prebuilt binaries from GitHub
 
 [![Go Report Card](https://goreportcard.com/badge/github.com/zyedidia/eget)](https://goreportcard.com/report/github.com/zyedidia/eget)
 [![Release](https://img.shields.io/github/release/zyedidia/eget.svg?label=Release)](https://github.com/zyedidia/eget/releases)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/zyedidia/eget/blob/master/LICENSE)
 
-**Eget** is the best way to easily get pre-built binaries for your favorite
-tools. It downloads and extracts pre-built binaries from releases on GitHub. To
+[**Eget**](https://github.com/zyedidia/eget) is the best way to easily get pre-built binaries for your favorite
+tools and **eget.wasm** lets you use `eget` in WASM environments, including node.js.
+It downloads and extracts pre-built binaries from releases on GitHub. To
 use it, provide a repository and Eget will search through the assets from the
 latest release in an attempt to find a suitable prebuilt binary for your
 system. If one is found, the asset will be downloaded and Eget will extract the
@@ -26,9 +27,9 @@ FAQ for a clear set of rules to make your software compatible with Eget.
 
 For more in-depth documentation, see [DOCS.md](DOCS.md).
 
-# Examples
+## Examples
 
-```
+```sh
 eget zyedidia/micro --tag nightly
 eget jgm/pandoc --to /usr/local/bin
 eget junegunn/fzf
@@ -42,10 +43,6 @@ eget https://go.dev/dl/go1.17.5.linux-amd64.tar.gz --file go --to ~/go1.17.5
 eget --all --file '*' ActivityWatch/activitywatch
 ```
 
-# How to get Eget
-
-Before you can get anything, you have to get Eget. If you already have Eget and want to upgrade, use `eget zyedidia/eget`.
-
 ## WASM Version with Node.js Wrapper
 
 A Node.js wrapper is provided for easy integration with Node.js applications. It uses a WASI build of `eget` and automates the handling network requests, which are intercepted by the WASM module and fulfilled by the Node.js host.
@@ -53,19 +50,19 @@ A Node.js wrapper is provided for easy integration with Node.js applications. It
 ### Installation
 
 ```bash
-npm install eget.wasm
+npm install eget-wasm
 # or
-pnpm add eget.wasm
+pnpm add eget-wasm
 # or
-yarn add eget.wasm
+yarn add eget-wasm
 ```
 
 #### Quick Start
 
-The easiest way to use `eget.wasm` is with the `eget()` convenience function. It handles instance creation, download execution, and cleanup automatically.
+The easiest way to use `eget-wasm` is with the `eget()` convenience function. It handles instance creation, download execution, and cleanup automatically.
 
 ```js
-import { eget } from 'eget.wasm';
+import { eget } from 'eget-wasm';
 
 // Download the latest version of sops for the current system
 await eget('getsops/sops');
@@ -85,7 +82,7 @@ await eget('cli/cli', {
 A convenience function that creates an `Eget` instance, runs a download, and cleans up temporary files automatically.
 
 ```js
-import { eget } from 'eget.wasm';
+import { eget } from 'eget-wasm';
 
 const success = await eget('owner/repo', options);
 ```
@@ -125,7 +122,7 @@ const success = await eget('owner/repo', options);
 Creates a reusable `Eget` instance. This is useful if you want to perform multiple downloads or manage cleanup manually.
 
 ```js
-import { Eget } from 'eget.wasm';
+import { Eget } from 'eget-wasm';
 
 const egetInstance = new Eget({
   cwd: '/usr/local/bin',
@@ -173,7 +170,7 @@ await egetInstance.cleanup();
 A utility function that returns the current platform and architecture in a format `eget` understands.
 
 ```js
-import { detectSystem } from 'eget.wasm';
+import { detectSystem } from 'eget-wasm';
 
 console.log(detectSystem()); // e.g., 'linux/amd64', 'darwin/arm64'
 ```
@@ -183,7 +180,7 @@ console.log(detectSystem()); // e.g., 'linux/amd64', 'darwin/arm64'
 You can monitor download progress by providing an `onProgress` callback. The callback receives the URL, the number of bytes downloaded so far, and the total file size.
 
 ```js
-import { eget } from 'eget.wasm';
+import { eget } from 'eget-wasm';
 
 await eget('massive/file', {
   onProgress: (url, current, total) => {
@@ -203,7 +200,7 @@ The wrapper throws specific errors for different HTTP and network issues. This a
 -   `HttpError` (other HTTP errors)
 
 ```js
-import { eget, HttpErrorRateLimit } from 'eget.wasm';
+import { eget, HttpErrorRateLimit } from 'eget-wasm';
 
 try {
   await eget('some/repo');
@@ -221,8 +218,8 @@ try {
 The package includes full TypeScript definitions for all exported functions and classes.
 
 ```typescript
-import { Eget, detectSystem } from 'eget.wasm';
-import type { EgetOptions, DownloadOptions } from 'eget.wasm';
+import { Eget, detectSystem } from 'eget-wasm';
+import type { EgetOptions, DownloadOptions } from 'eget-wasm';
 
 const egetOptions: EgetOptions = {
   tmpDir: './cache',
@@ -298,6 +295,10 @@ wasmtime --dir=$PWD::/ eget.wasm --system=linux/amd64 getsops/sops -a ^json
 ```
 
 This will extract `sops` to the current directory.
+
+## How to get Eget
+
+Before you can get anything, you have to get Eget. If you already have Eget and want to upgrade, use `eget zyedidia/eget`.
 
 ### Quick-install script
 

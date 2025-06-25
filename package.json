@@ -1,6 +1,6 @@
 {
-  "name": "eget.wasm",
-  "version": "1.3.4",
+  "name": "eget-wasm",
+  "version": "1.3.4-alpha.1",
   "description": "eget WASM with node.js wrapper",
   "type": "module",
   "main": "eget.js",
@@ -14,7 +14,10 @@
   "files": [
     "eget.js",
     "eget.d.ts",
-    "eget.wasm"
+    "eget.wasm",
+    "README.md",
+    "LICENSE",
+    "package.json"
   ],
   "scripts": {
     "typecheck": "tsc -p jsconfig.json",
