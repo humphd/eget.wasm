@@ -11,4 +11,7 @@ eget.1
 .aider*
 /types/*
 /node_modules/*
+# Use `pnpm build:eget.wasm`
 eget.wasm
+# Use `pnpm build:eget.cjs`
+eget.cjs

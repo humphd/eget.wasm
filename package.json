@@ -1,6 +1,6 @@
 {
   "name": "eget-wasm",
-  "version": "1.3.4-alpha.1",
+  "version": "1.3.4-alpha.2",
   "description": "eget WASM with node.js wrapper",
   "type": "module",
   "main": "eget.js",
@@ -8,11 +8,13 @@
   "exports": {
     ".": {
       "import": "./eget.js",
+      "require": "./eget.cjs",
       "types": "./eget.d.ts"
     }
   },
   "files": [
     "eget.js",
+    "eget.cjs",
     "eget.d.ts",
     "eget.wasm",
     "README.md",
@@ -21,7 +23,9 @@
   ],
   "scripts": {
     "typecheck": "tsc -p jsconfig.json",
-    "build": "make eget.wasm",
+    "build:eget.cjs": "esbuild eget.js --format=cjs --platform=node --outfile=eget.cjs --bundle --external:node:* --external:./package.json",
+    "build:eget.wasm": "make eget.wasm",
+    "build": "pnpm build:eget.wasm && pnpm build:eget.cjs",
     "test": "node --test --test-force-exit test/eget.test.js",
     "format": "prettier --write eget.d.ts eget.js test/eget.test.js"
   },
@@ -29,6 +33,7 @@
   "devDependencies": {
     "@types/node": "^22",
     "cli-progress": "^3.12.0",
+    "esbuild": "^0.25",
     "prettier": "3.5.3",
     "pretty-bytes": "^7.0.0",
     "typescript": "^5.8.3"
