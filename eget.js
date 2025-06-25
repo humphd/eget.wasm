@@ -16,6 +16,7 @@ import { cwd } from "node:process";
 import { pipeline } from "node:stream/promises";
 import { Transform } from "node:stream";
 import * as packageJson from "./package.json" with { type: "json" };
+import { fileURLToPath } from "node:url";
 
 /**
  * HTTP errors
@@ -276,6 +277,21 @@ async function moveDirectoryContents(sourceDir, destDir) {
 }
 
 /**
+ * Gets the path to the WASM file, handling both ESM and CJS contexts.
+ * We expect it to be built beside `eget.js`.
+ * @returns {string} Path to eget.wasm
+ */
+function getWasmPath() {
+  // CommonJS
+  if (typeof __dirname !== 'undefined') {
+    return join(__dirname, "eget.wasm");
+  }
+
+  // ESM
+  return fileURLToPath(new URL("./eget.wasm", import.meta.url));
+}
+
+/**
  * Node.js wrapper for eget WASM binary.
  */
 export class Eget {
@@ -301,8 +317,7 @@ export class Eget {
     Eget.wasmCompilationPromise = (async () => {
       try {
         const module = await WebAssembly.compile(
-          // We expect to find eget.wasm in the same dir as eget.js
-          await readFile(new URL("./eget.wasm", import.meta.url)),
+          await readFile(getWasmPath()),
         );
         this.log(`Compiled WASM module`);
         return module;
