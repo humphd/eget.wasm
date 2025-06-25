@@ -75,6 +75,12 @@ await eget('cli/cli', {
 });
 ```
 
+You can also use `eget-wasm` as a CommonJS module:
+
+```js
+const { eget } = require('eget-wasm');
+```
+
 ### API Reference
 
 #### `eget(repo, [options])`

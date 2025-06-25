@@ -1,15 +1,15 @@
 {
   "name": "eget-wasm",
-  "version": "1.3.4-alpha.2",
+  "version": "1.3.4-alpha.3",
   "description": "eget WASM with node.js wrapper",
   "type": "module",
   "main": "eget.js",
   "types": "eget.d.ts",
   "exports": {
     ".": {
+      "types": "./eget.d.ts",
       "import": "./eget.js",
-      "require": "./eget.cjs",
-      "types": "./eget.d.ts"
+      "require": "./eget.cjs"
     }
   },
   "files": [
