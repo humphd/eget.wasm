@@ -694,8 +694,25 @@ export class Eget {
             return true;
           }
 
+          // Check if 'to' should be treated as a directory
           const toIsSubdirectory =
             to && (extractAll || (extractAll && extractedItems.length > 1));
+
+          // Also check if 'to' points to an existing directory
+          let toPointsToExistingDirectory = false;
+          if (to) {
+            const resolvedTo = resolve(this.cwd, to);
+            try {
+              const toStats = await stat(resolvedTo);
+              toPointsToExistingDirectory = toStats.isDirectory();
+            } catch {
+              // Path doesn't exist or can't be accessed, treat as file
+              toPointsToExistingDirectory = false;
+            }
+          }
+
+          const shouldTreatToAsDirectory =
+            toIsSubdirectory || toPointsToExistingDirectory;
 
           for (const itemName of extractedItems) {
             const sourcePathInSandbox = join(downloadTempDir, itemName);
@@ -703,12 +720,14 @@ export class Eget {
 
             let finalItemPathOnHost;
             if (to) {
-              if (toIsSubdirectory) {
-                finalItemPathOnHost = join(this.cwd, to, itemName);
+              const resolvedTo = resolve(this.cwd, to);
+
+              if (shouldTreatToAsDirectory) {
+                finalItemPathOnHost = join(resolvedTo, itemName);
               } else {
                 // 'to' is the specific name/path for the single item,
                 // relative to this.cwd.
-                finalItemPathOnHost = join(this.cwd, to);
+                finalItemPathOnHost = resolvedTo;
               }
             } else {
               // No 'to', use original item name within this.cwd.

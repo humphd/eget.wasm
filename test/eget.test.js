@@ -245,4 +245,30 @@ describe("Eget WASM Node.js Wrapper", () => {
       assert.ok(files.length >= 1, "Should download multiple assets");
     });
   });
+
+  // Test Case: Absolute path handling with 'to'
+  test("should handle absolute paths correctly with 'to' option", async () => {
+    const testDir = join(TEST_BASE_DIR, "absolute-path-test");
+    const absoluteTargetDir = resolve(testDir, "bin");
+
+    // Ensure the target directory exists
+    await mkdir(absoluteTargetDir, { recursive: true });
+
+    const success = await eget("getsops/sops", {
+      asset: "^json",
+      // Pass absolute path - should put file IN this directory
+      to: absoluteTargetDir,
+    });
+
+    assert.ok(success, "eget() should return true on success");
+    await access(join(absoluteTargetDir, "sops"));
+
+    // Verify the file is in the correct absolute location
+    const files = await readdir(absoluteTargetDir);
+    assert.ok(
+      files.includes("sops"),
+      "sops binary should be in target directory",
+    );
+    assert.strictEqual(files.length, 1, "Should only contain the sops binary");
+  });
 });
