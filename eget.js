@@ -283,7 +283,7 @@ async function moveDirectoryContents(sourceDir, destDir) {
  */
 function getWasmPath() {
   // CommonJS
-  if (typeof __dirname !== 'undefined') {
+  if (typeof __dirname !== "undefined") {
     return join(__dirname, "eget.wasm");
   }
 
@@ -316,9 +316,7 @@ export class Eget {
     this.log(`Initiating compilation for WASM module`);
     Eget.wasmCompilationPromise = (async () => {
       try {
-        const module = await WebAssembly.compile(
-          await readFile(getWasmPath()),
-        );
+        const module = await WebAssembly.compile(await readFile(getWasmPath()));
         this.log(`Compiled WASM module`);
         return module;
       } catch (error) {
